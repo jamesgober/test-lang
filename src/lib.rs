@@ -21,6 +21,12 @@
 //! lexer, a generated parser, or a diagnostics layer without coupling to any of
 //! them.
 //!
+//! ## Stability
+//!
+//! As of 1.0.0 the public surface — the four exported types and their inherent
+//! methods and trait impls — is stable and frozen. It will not change in a
+//! breaking way before a 2.0. New capability arrives additively in 1.x releases.
+//!
 //! ## The two types
 //!
 //! - [`Snapshot`] — a normalized, comparable rendering of some output. Build one
@@ -65,8 +71,9 @@
 //! ## `no_std`
 //!
 //! The crate is `no_std` + `alloc` when the default `std` feature is disabled.
-//! Every type is available in both modes; the only difference is which crate the
-//! [`Error`](core::error::Error) impl is anchored to.
+//! Every type — including the [`Error`](core::error::Error) impl on
+//! [`Mismatch`], which is anchored to `core::error::Error` in both modes — is
+//! available with or without `std`.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![cfg_attr(docsrs, feature(doc_cfg))]

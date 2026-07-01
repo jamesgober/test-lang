@@ -18,6 +18,8 @@ Compiler snapshot test harness for tokens, ASTs, and diagnostics. This document 
 
 The design is small on purpose. There are two public types you construct — [`Snapshot`](#snapshot) and, on failure, you receive a [`Mismatch`](#mismatch) — plus the [`Diff`](#diff) / [`Change`](#change) pair that describes what differed. That is the whole API.
 
+> **Stable as of 1.0.0.** Everything documented here — the four types, their inherent methods, and their trait implementations — is frozen under [SemVer](https://semver.org/): no breaking change lands before a 2.0. 1.x releases add capability without removing or altering what is described below.
+
 <br>
 
 ## Table of Contents
@@ -44,14 +46,14 @@ The design is small on purpose. There are two public types you construct — [`S
 
 ```toml
 [dependencies]
-test-lang = "0.2"
+test-lang = "1"
 ```
 
-`no_std` + `alloc` (everything works; only the `Error` impl moves from `std` to `core`):
+`no_std` + `alloc` (everything works; the `Error` impl is `core::error::Error` either way):
 
 ```toml
 [dependencies]
-test-lang = { version = "0.2", default-features = false }
+test-lang = { version = "1", default-features = false }
 ```
 
 MSRV: Rust 1.85 (2024 edition).

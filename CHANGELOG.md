@@ -21,6 +21,23 @@
 
 ---
 
+## [1.0.0] - 2026-07-01
+
+API freeze. The public surface shipped in 0.2.0 is now stable: the four types
+(`Snapshot`, `Diff`, `Change`, `Mismatch`), their inherent methods, and their
+trait implementations will not change in a breaking way before a 2.0. There are
+no functional changes from 0.2.0 — this release records the SemVer promise.
+
+### Changed
+
+- `docs/API.md` marked stable; the SemVer stability promise is recorded there and
+  in the crate-level documentation.
+- Corrected the `std` feature description: the `Error` impl is
+  `core::error::Error` in both `std` and `no_std` builds; the feature only
+  controls whether the standard library is linked.
+
+---
+
 ## [0.2.0] - 2026-07-01
 
 The core snapshot harness. Given a stage's output — a token stream, a syntax
@@ -69,6 +86,7 @@ Initial scaffold and repository bootstrap. No domain logic yet &mdash; this rele
 - `.github/workflows/ci.yml` CI matrix; `deny.toml`, `clippy.toml`, `rustfmt.toml`.
 - `dev/DIRECTIVES.md` and `dev/ROADMAP.md` (committed engineering standards + plan).
 
-[Unreleased]: https://github.com/jamesgober/test-lang/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/jamesgober/test-lang/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/jamesgober/test-lang/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/jamesgober/test-lang/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jamesgober/test-lang/releases/tag/v0.1.0

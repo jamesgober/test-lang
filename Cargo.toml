@@ -3,7 +3,7 @@
 # =============================================================================
 [package]
 name    = "test-lang"
-version = "0.2.0"
+version = "1.0.0"
 
 # Minimum Supported Rust Version (MSRV)
 rust-version = "1.85"
@@ -45,8 +45,8 @@ path = "src/lib.rs"
 # #################################
 [features]
 default = ["std"]
-# Anchors the `Error` impl to `std::error::Error`. With this off, the crate is
-# `no_std` + `alloc` and the same impl comes from `core::error::Error`.
+# Links the standard library. With this off, the crate is `no_std` + `alloc`;
+# the `Error` impl comes from `core::error::Error` either way.
 std = []
 
 

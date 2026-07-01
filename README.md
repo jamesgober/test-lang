@@ -29,7 +29,7 @@
         <strong>MSRV is 1.85+</strong> (Rust 2024 edition). Part of the <code>-lang</code> language-construction family.
     </p>
     <blockquote>
-        <strong>Status: pre-1.0, in active development.</strong> The public API is being designed across the 0.x series and frozen at <code>1.0.0</code>. See <a href="./CHANGELOG.md"><code>CHANGELOG.md</code></a>.
+        <strong>Stable — API frozen at <code>1.0.0</code>.</strong> The public surface will not change in a breaking way before a 2.0; 1.x releases are additive. See <a href="./docs/API.md"><code>docs/API.md</code></a> for the frozen surface and <a href="./CHANGELOG.md"><code>CHANGELOG.md</code></a> for history.
     </blockquote>
 </div>
 
@@ -54,14 +54,14 @@ The check is a line-level diff with a common prefix/suffix fast path: identical 
 
 ```toml
 [dependencies]
-test-lang = "0.2"
+test-lang = "1"
 ```
 
 `no_std` + `alloc` (drops the `std::error::Error` anchor, keeps everything else):
 
 ```toml
 [dependencies]
-test-lang = { version = "0.2", default-features = false }
+test-lang = { version = "1", default-features = false }
 ```
 
 <br>

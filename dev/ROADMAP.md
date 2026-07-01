@@ -25,7 +25,11 @@ release cadence to four other crates for no functional gain. Recorded here per
 the anti-deferral rule: this is a design change, not a deferral — the task is
 dropped, not moved to a later phase.
 
-## v1.0.0 - API freeze
+## v1.0.0 - API freeze (DONE)
 Public surface stable and frozen until 2.0.
-- [ ] docs/API.md marked stable; SemVer promise recorded.
-- [ ] Full test + benchmark suite green on all three platforms.
+- [x] docs/API.md marked stable; SemVer promise recorded (there and in the crate docs).
+- [x] Full test + benchmark suite green on all three platforms (Linux/macOS/Windows
+      via the CI matrix; Windows + WSL2 Ubuntu verified locally).
+
+Frozen surface: `Snapshot`, `Diff`, `Change`, `Mismatch` — their inherent methods
+and trait impls. No breaking change before 2.0; 1.x is additive only.
