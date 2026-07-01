@@ -21,6 +21,41 @@
 
 ---
 
+## [0.2.0] - 2026-07-01
+
+The core snapshot harness. Given a stage's output — a token stream, a syntax
+tree, or a rendered diagnostic — the harness captures it as normalized text and
+asserts it against an expected block, reporting a line-level unified diff when
+they differ. No runtime dependencies; `no_std` + `alloc` supported.
+
+### Added
+
+- `Snapshot` — a normalized, comparable rendering of compiler output. Built with
+  `new`, `display`, `debug`, or `per_line`; compared with `check`.
+- `Diff` and `Change` — the line-level edit script (LCS with a common
+  prefix/suffix fast path), rendered as a unified `-expected`/`+actual` diff.
+- `Mismatch` — the error returned by `Snapshot::check`, carrying the `Diff` and
+  implementing `core::error::Error`.
+- Cross-platform normalization: CRLF/CR to LF, trailing-whitespace stripping,
+  and trailing-blank-line trimming, so a snapshot written on one platform passes
+  on another.
+- `tests/harness.rs` integration tests, `tests/proptests.rs` property tests, and
+  `benches/bench.rs` criterion benchmarks for the capture and check paths.
+- `examples/tokens.rs`, `examples/ast.rs`, and `examples/diagnostics.rs`.
+
+### Changed
+
+- Removed the unused `serde` feature and optional dependency; the harness has no
+  runtime dependencies.
+- MSRV alignment: `clippy.toml` now matches the declared `rust-version = 1.85`.
+
+### Fixed
+
+- `Cargo.toml` `keywords` and `categories` arrays now use quoted strings (the
+  scaffold left them unquoted, which failed to parse).
+
+---
+
 ## [0.1.0] - 2026-06-18
 
 Initial scaffold and repository bootstrap. No domain logic yet &mdash; this release establishes the structure, tooling, and quality gates the implementation will be built on.
@@ -34,5 +69,6 @@ Initial scaffold and repository bootstrap. No domain logic yet &mdash; this rele
 - `.github/workflows/ci.yml` CI matrix; `deny.toml`, `clippy.toml`, `rustfmt.toml`.
 - `dev/DIRECTIVES.md` and `dev/ROADMAP.md` (committed engineering standards + plan).
 
-[Unreleased]: https://github.com/jamesgober/test-lang/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/jamesgober/test-lang/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/jamesgober/test-lang/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jamesgober/test-lang/releases/tag/v0.1.0

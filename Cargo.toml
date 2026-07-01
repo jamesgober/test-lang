@@ -3,7 +3,7 @@
 # =============================================================================
 [package]
 name    = "test-lang"
-version = "0.1.0"
+version = "0.2.0"
 
 # Minimum Supported Rust Version (MSRV)
 rust-version = "1.85"
@@ -19,10 +19,10 @@ readme = "README.md"
 description = "Compiler snapshot test harness for tokens, ASTs, and errors."
 
 # Keywords (5 max)
-keywords = [compiler,language,testing,snapshot]
+keywords = ["compiler", "language", "testing", "snapshot"]
 
 # Categories
-categories = [development-tools,development-tools::testing]
+categories = ["development-tools", "development-tools::testing"]
 
 # Links
 homepage      = "https://github.com/jamesgober/test-lang"
@@ -45,15 +45,15 @@ path = "src/lib.rs"
 # #################################
 [features]
 default = ["std"]
+# Anchors the `Error` impl to `std::error::Error`. With this off, the crate is
+# `no_std` + `alloc` and the same impl comes from `core::error::Error`.
 std = []
-# Serialization support.
-serde = ["dep:serde"]
 
 
 # DEPENDENCIES
 # #################################
+# No runtime dependencies: the harness works over `core::fmt` and `alloc` only.
 [dependencies]
-serde = { version = "1", optional = true, default-features = false, features = ["derive", "alloc"] }
 
 
 # DEV DEPENDENCIES
