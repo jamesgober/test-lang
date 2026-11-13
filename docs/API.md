@@ -228,6 +228,8 @@ where
 
 Build a snapshot from a sequence of values, rendering each on its own line through `Display`. This is the idiomatic way to snapshot a **token stream**: one token per line means the diff on failure points at the exact token that changed, instead of at one long line.
 
+The text is normalized like any snapshot, so an item that renders as only spaces or tabs becomes a blank line, and blank lines at the end are dropped. If whitespace tokens matter, render them visibly, for example through `Debug` (`" "` instead of a bare space).
+
 **Parameters**
 
 - `items` — anything iterable whose items are `Display` (`Vec<T>`, `&[T]`, an array, an iterator, …).
@@ -394,7 +396,7 @@ assert_eq!(edits, 2); // one deletion, one insertion
 <a id="diff"></a>
 ### `Diff`
 
-A minimal line-level edit script between two blocks of text. Computed by the harness, exposed through [`Mismatch::diff`](#mismatch), and constructable directly for standalone use.
+A line-level edit script between two blocks of text, minimal unless the changed region is very large. Computed by the harness, exposed through [`Mismatch::diff`](#mismatch), and constructable directly for standalone use.
 
 ```rust,ignore
 pub fn lines(expected: &str, actual: &str) -> Diff
@@ -402,7 +404,7 @@ pub fn is_empty(&self) -> bool
 pub fn changes(&self) -> impl Iterator<Item = (Change, &str)>
 ```
 
-Derives `Debug`, `Clone`, `PartialEq`, `Eq`. Implements `Display`, rendering the diff in unified style (one line per change, each prefixed with its [`Change`](#change) marker). The engine is an LCS diff with a common prefix/suffix fast path, so identical leading and trailing lines are matched in linear time and the diff stays tight around the region that changed.
+Derives `Debug`, `Clone`, `PartialEq`, `Eq`. Implements `Display`, rendering the diff in unified style (one line per change, each prefixed with its [`Change`](#change) marker). The engine is an LCS diff with a common prefix/suffix fast path, so identical leading and trailing lines are matched in linear time and the diff stays tight around the region that changed. The LCS table needs one `u32` per pair of changed lines, so it is capped at 4 Mi cells (16 MiB, a changed region of about 2,000 by 2,000 lines). A larger changed region is reported as deleted and then inserted as a whole: still a correct edit script, but not a minimal one.
 
 **Methods**
 

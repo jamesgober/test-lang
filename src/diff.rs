@@ -13,10 +13,19 @@
 //! sees the region that actually changed. For snapshot-sized inputs this is
 //! effectively instant, and it keeps the reported diff tight instead of
 //! re-aligning lines that never moved.
+//!
+//! The LCS table takes memory proportional to the product of the two changed
+//! regions' line counts. Past 4 Mi cells (a changed region of
+//! about 2,000 by 2,000 lines) the region is reported as deleted and then
+//! inserted as a whole, which is still a correct edit script but not a minimal
+//! one.
 
 use alloc::string::String;
 use alloc::vec::Vec;
 use core::fmt;
+
+/// The most cells the LCS table may have: 4 Mi cells, 16 MiB of `u32`.
+const MAX_LCS_CELLS: usize = 1 << 22;
 
 /// The role a line plays in a [`Diff`].
 ///
@@ -50,7 +59,12 @@ impl Change {
     }
 }
 
-/// A minimal line-level edit script between two blocks of text.
+/// A line-level edit script between two blocks of text.
+///
+/// The script is minimal unless the changed region is very large (more than
+/// about 2,000 by 2,000 lines once common leading and trailing lines are
+/// removed). Such a region is shown as deleted and then inserted in full, so
+/// memory stays bounded.
 ///
 /// Construct one with [`Diff::lines`]. Iterate the individual changes with
 /// [`changes`](Diff::changes), ask whether the two inputs matched with
@@ -222,6 +236,14 @@ fn diff_middle<'a>(old: &[&'a str], new: &[&'a str], out: &mut Vec<(Change, Stri
     }
     if new.is_empty() {
         out.extend(old.iter().map(|l| (Change::Delete, String::from(*l))));
+        return;
+    }
+
+    let cells = (old.len() + 1).checked_mul(new.len() + 1);
+    if cells.is_none_or(|cells| cells > MAX_LCS_CELLS) {
+        // Too large for the table: report the region as replaced.
+        out.extend(old.iter().map(|l| (Change::Delete, String::from(*l))));
+        out.extend(new.iter().map(|l| (Change::Insert, String::from(*l))));
         return;
     }
 
