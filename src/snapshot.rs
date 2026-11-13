@@ -133,6 +133,11 @@ impl Snapshot {
     /// This is the idiomatic way to snapshot a token stream: one token per
     /// line makes the diff on failure point at the exact token that changed.
     ///
+    /// The text is normalized like any snapshot, so an item that renders as
+    /// only spaces or tabs becomes a blank line, and blank lines at the end
+    /// are dropped. If whitespace tokens matter, render them visibly, for
+    /// example through [`Debug`](fmt::Debug) (`" "` instead of ` `).
+    ///
     /// # Examples
     ///
     /// ```
@@ -214,6 +219,11 @@ impl Snapshot {
     /// ```
     pub fn check(&self, expected: impl AsRef<str>) -> Result<(), Mismatch> {
         let expected = normalize(expected.as_ref());
+        // The common case is a match: compare the text first and build the
+        // line diff only when there is something to report.
+        if expected == self.text {
+            return Ok(());
+        }
         let diff = Diff::lines(&expected, &self.text);
         if diff.is_empty() {
             Ok(())

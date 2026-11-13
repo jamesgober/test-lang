@@ -44,7 +44,7 @@ Latest local Criterion means (`cargo bench`, Windows x86_64, Rust stable). The w
 - **Check, matching** (16 lines): ~1.2 µs
 - **Check, matching** (256 lines): ~19 µs
 
-The check is a line-level diff with a common prefix/suffix fast path: identical leading and trailing lines are matched in linear time before the quadratic LCS engine runs, so a near-miss snapshot only pays for the region that actually changed.
+The check is a line-level diff with a common prefix/suffix fast path: identical leading and trailing lines are matched in linear time before the quadratic LCS engine runs, so a near-miss snapshot only pays for the region that actually changed. A matching snapshot is compared as plain text and builds no diff at all, and the LCS table is capped at 16 MiB: a larger changed region is shown as removed and re-added in full.
 
 <br>
 <hr>

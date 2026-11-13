@@ -11,13 +11,24 @@
 
 ## [Unreleased]
 
-### Added
+---
 
-### Changed
+## [1.0.1] - 2026-11-12
 
 ### Fixed
 
-### Security
+- `Diff::lines` built an LCS table with one `u32` per pair of changed lines and
+  no limit, so two 8,000-line texts that differ at both ends took 244 MiB, and
+  larger ones could exhaust memory. The table is now capped at 4 Mi cells
+  (16 MiB). A changed region too large for it is reported as deleted and then
+  inserted in full: still a correct diff, but not a minimal one.
+
+### Changed
+
+- `Snapshot::check` compares the normalized text first and builds a diff only
+  on a mismatch, so a matching snapshot no longer copies every line.
+- Documented that `Snapshot::per_line` normalizes like any snapshot, so an item
+  that renders as only whitespace becomes a blank line.
 
 ---
 
@@ -86,7 +97,8 @@ Initial scaffold and repository bootstrap. No domain logic yet &mdash; this rele
 - `.github/workflows/ci.yml` CI matrix; `deny.toml`, `clippy.toml`, `rustfmt.toml`.
 - `dev/DIRECTIVES.md` and `dev/ROADMAP.md` (committed engineering standards + plan).
 
-[Unreleased]: https://github.com/jamesgober/test-lang/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/jamesgober/test-lang/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/jamesgober/test-lang/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jamesgober/test-lang/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/jamesgober/test-lang/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jamesgober/test-lang/releases/tag/v0.1.0
